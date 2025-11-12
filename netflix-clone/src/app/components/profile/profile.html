@@ -1,0 +1,33 @@
+<app-navbar></app-navbar>
+<div class="profile-page">
+  <div class="profile-container" *ngIf="currentUser">
+    <h1>Mon Profil</h1>
+    
+    <div class="profile-card">
+      <div class="profile-avatar">
+        <img [src]="currentUser.avatar" [alt]="currentUser.name">
+      </div>
+      
+      <div class="profile-info">
+        <div class="info-group">
+          <label>Nom</label>
+          <p>{{ currentUser.name }}</p>
+        </div>
+        
+        <div class="info-group">
+          <label>Email</label>
+          <p>{{ currentUser.email }}</p>
+        </div>
+        
+        <div class="info-group">
+          <label>Films/Séries dans ma liste</label>
+          <p>{{ currentUser.myList.length }}</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="profile-actions">
+      <button class="btn-danger" (click)="logout()">Déconnexion</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,209 @@
+.video-player {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-color: #000;
+
+  .back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    color: white;
+    padding: 0.75rem;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+  }
+
+  .player-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .video-placeholder {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(255, 255, 255, 0.03) 2px,
+          rgba(255, 255, 255, 0.03) 4px
+        );
+    }
+
+    .video-info {
+      text-align: center;
+      color: white;
+      z-index: 1;
+      max-width: 600px;
+      padding: 2rem;
+
+      svg {
+        margin-bottom: 2rem;
+        opacity: 0.7;
+      }
+
+      h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+      }
+
+      p {
+        font-size: 1.2rem;
+        color: #b3b3b3;
+        margin-bottom: 1rem;
+      }
+
+      .video-note {
+        font-size: 0.95rem;
+        color: #808080;
+        line-height: 1.6;
+        margin-top: 2rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        border-left: 3px solid #e50914;
+      }
+    }
+  }
+
+  .player-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+    padding: 2rem 2rem 1rem;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      position: relative;
+
+      .progress {
+        height: 100%;
+        background: #e50914;
+        border-radius: 2px;
+        position: relative;
+
+        &::after {
+          content: '';
+          position: absolute;
+          right: -6px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 12px;
+          height: 12px;
+          background: #e50914;
+          border-radius: 50%;
+          opacity: 0;
+          transition: opacity 0.2s;
+        }
+      }
+
+      &:hover .progress::after {
+        opacity: 1;
+      }
+    }
+
+    .controls-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .controls-left,
+    .controls-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .control-btn {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    .time {
+      color: white;
+      font-size: 0.9rem;
+      margin-left: 0.5rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .video-placeholder .video-info {
+      h2 {
+        font-size: 1.8rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+
+      .video-note {
+        font-size: 0.85rem;
+      }
+    }
+
+    .player-controls {
+      padding: 1rem 1rem 0.5rem;
+
+      .controls-left,
+      .controls-right {
+        gap: 0.5rem;
+      }
+
+      .time {
+        font-size: 0.8rem;
+      }
+    }
+  }
+}

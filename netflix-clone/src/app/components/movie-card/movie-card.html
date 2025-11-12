@@ -1,0 +1,24 @@
+<div class="movie-card" [routerLink]="['/movie', movie.id]">
+  <img [src]="movie.imageUrl" [alt]="movie.title" class="movie-card__image">
+  <button class="movie-card__mylist-btn" (click)="toggleMyList($event)" [class.movie-card__mylist-btn--added]="isInMyList()">
+    <svg *ngIf="!isInMyList()" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M12 5v14M5 12h14"/>
+    </svg>
+    <svg *ngIf="isInMyList()" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M20 6L9 17l-5-5"/>
+    </svg>
+  </button>
+  <div class="movie-card__overlay">
+    <div class="movie-card__info">
+      <h3 class="movie-card__title">{{ movie.title }}</h3>
+      <div class="movie-card__metadata">
+        <span class="movie-card__rating">★ {{ movie.rating }}</span>
+        <span class="movie-card__year">{{ movie.year }}</span>
+        <span class="movie-card__duration">{{ movie.duration }}</span>
+      </div>
+      <div class="movie-card__genres">
+        <span *ngFor="let genre of movie.genre" class="genre-tag">{{ genre }}</span>
+      </div>
+    </div>
+  </div>
+</div>

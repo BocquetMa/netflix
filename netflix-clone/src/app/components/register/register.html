@@ -1,0 +1,81 @@
+<div class="login-page">
+  <div class="login-container">
+    <div class="login-box">
+      <h1 class="logo">NETSTREAM</h1>
+      <h2>Inscription</h2>
+
+      <div class="alert alert-error" *ngIf="error">
+        {{ error }}
+      </div>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <input
+            type="text"
+            formControlName="name"
+            class="form-control"
+            placeholder="Nom complet"
+            [class.is-invalid]="f['name'].invalid && f['name'].touched"
+          />
+          <div class="invalid-feedback" *ngIf="f['name'].invalid && f['name'].touched">
+            <span *ngIf="f['name'].errors?.['required']">Le nom est requis</span>
+            <span *ngIf="f['name'].errors?.['minlength']">Le nom doit contenir au moins 2 caractères</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input
+            type="email"
+            formControlName="email"
+            class="form-control"
+            placeholder="Email"
+            [class.is-invalid]="f['email'].invalid && f['email'].touched"
+          />
+          <div class="invalid-feedback" *ngIf="f['email'].invalid && f['email'].touched">
+            <span *ngIf="f['email'].errors?.['required']">L'email est requis</span>
+            <span *ngIf="f['email'].errors?.['email']">Email invalide</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input
+            type="password"
+            formControlName="password"
+            class="form-control"
+            placeholder="Mot de passe"
+            [class.is-invalid]="f['password'].invalid && f['password'].touched"
+          />
+          <div class="invalid-feedback" *ngIf="f['password'].invalid && f['password'].touched">
+            <span *ngIf="f['password'].errors?.['required']">Le mot de passe est requis</span>
+            <span *ngIf="f['password'].errors?.['minlength']">Le mot de passe doit contenir au moins 6 caractères</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input
+            type="password"
+            formControlName="confirmPassword"
+            class="form-control"
+            placeholder="Confirmer le mot de passe"
+            [class.is-invalid]="(f['confirmPassword'].invalid && f['confirmPassword'].touched) || (registerForm.errors?.['mismatch'] && f['confirmPassword'].touched)"
+          />
+          <div class="invalid-feedback" *ngIf="f['confirmPassword'].invalid && f['confirmPassword'].touched">
+            <span *ngIf="f['confirmPassword'].errors?.['required']">Veuillez confirmer le mot de passe</span>
+          </div>
+          <div class="invalid-feedback" *ngIf="registerForm.errors?.['mismatch'] && f['confirmPassword'].touched">
+            Les mots de passe ne correspondent pas
+          </div>
+        </div>
+
+        <button type="submit" class="btn-login" [disabled]="loading || registerForm.invalid">
+          <span *ngIf="!loading">S'inscrire</span>
+          <span *ngIf="loading">Inscription en cours...</span>
+        </button>
+
+        <div class="signup-link">
+          <p>Vous avez déjà un compte ? <a routerLink="/login">Connectez-vous</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

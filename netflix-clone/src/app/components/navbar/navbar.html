@@ -1,0 +1,57 @@
+<nav class="navbar" [class.navbar--scrolled]="isScrolled">
+  <div class="navbar__container">
+    <div class="navbar__left">
+      <a routerLink="/" class="navbar__logo">NETSTREAM</a>
+      <ul class="navbar__menu" *ngIf="isAuthenticated()">
+        <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Accueil</a></li>
+        <li><a routerLink="/series" routerLinkActive="active">Séries</a></li>
+        <li><a routerLink="/movies" routerLinkActive="active">Films</a></li>
+        <li><a routerLink="/my-list" routerLinkActive="active">Ma liste</a></li>
+      </ul>
+    </div>
+    <div class="navbar__right">
+      <ng-container *ngIf="isAuthenticated(); else notLoggedIn">
+        <button class="navbar__icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="navbar__profile" (click)="toggleProfileMenu()">
+          <img [src]="currentUser?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=default'" [alt]="currentUser?.name">
+          <svg class="dropdown-icon" width="12" height="12" viewBox="0 0 12 12" fill="white">
+            <path d="M6 9L1 4h10l-5 5z"/>
+          </svg>
+
+          <div class="profile-menu" *ngIf="showProfileMenu">
+            <div class="profile-menu__header">
+              <img [src]="currentUser?.avatar" [alt]="currentUser?.name">
+              <div class="profile-menu__info">
+                <p class="profile-menu__name">{{ currentUser?.name }}</p>
+                <p class="profile-menu__email">{{ currentUser?.email }}</p>
+              </div>
+            </div>
+            <div class="profile-menu__divider"></div>
+            <ul class="profile-menu__list">
+              <li><a routerLink="/profile"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Mon profil</a></li>
+              <li><a routerLink="/my-list"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Ma liste</a></li>
+            </ul>
+            <div class="profile-menu__divider"></div>
+            <button class="profile-menu__logout" (click)="logout()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              Déconnexion
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #notLoggedIn>
+        <a routerLink="/login" class="btn-login-nav">Connexion</a>
+      </ng-template>
+    </div>
+  </div>
+</nav>

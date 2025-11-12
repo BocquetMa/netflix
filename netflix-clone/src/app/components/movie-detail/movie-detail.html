@@ -1,0 +1,79 @@
+<app-navbar></app-navbar>
+
+<div class="movie-detail" *ngIf="movie">
+  <!-- Hero Section -->
+  <section class="detail-hero" [style.background-image]="'url(' + movie.backdropUrl + ')'">
+    <div class="detail-hero__overlay">
+      <div class="detail-hero__content">
+        <h1 class="detail-hero__title">{{ movie.title }}</h1>
+        <div class="detail-hero__metadata">
+          <span class="detail-hero__rating">★ {{ movie.rating }}</span>
+          <span>{{ movie.year }}</span>
+          <span>{{ movie.duration }}</span>
+          <span class="detail-hero__type">{{ movie.type === 'movie' ? 'Film' : 'Série' }}</span>
+        </div>
+        <div class="detail-hero__genres">
+          <span *ngFor="let genre of movie.genre" class="genre-badge">{{ genre }}</span>
+        </div>
+        <div class="detail-hero__buttons">
+          <button class="btn-play" [routerLink]="['/watch', movie.id]">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+            Regarder maintenant
+          </button>
+          <button class="btn-mylist" (click)="toggleMyList()" [class.btn-mylist--added]="isInMyList()">
+            <svg *ngIf="!isInMyList()" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            <svg *ngIf="isInMyList()" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            {{ isInMyList() ? 'Dans ma liste' : 'Ajouter à ma liste' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Details Section -->
+  <section class="details">
+    <div class="details__container">
+      <div class="details__main">
+        <h2>Synopsis</h2>
+        <p class="details__description">{{ movie.description }}</p>
+      </div>
+      <div class="details__info">
+        <div class="info-item">
+          <h3>Année</h3>
+          <p>{{ movie.year }}</p>
+        </div>
+        <div class="info-item">
+          <h3>Durée</h3>
+          <p>{{ movie.duration }}</p>
+        </div>
+        <div class="info-item">
+          <h3>Genres</h3>
+          <p>{{ movie.genre.join(', ') }}</p>
+        </div>
+        <div class="info-item">
+          <h3>Note</h3>
+          <p>{{ movie.rating }}/10</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Similar Movies -->
+  <section class="similar" *ngIf="similarMovies.length">
+    <app-movie-row
+      [title]="'Titres similaires'"
+      [movies]="similarMovies">
+    </app-movie-row>
+  </section>
+</div>
+
+<div class="movie-detail__not-found" *ngIf="!movie">
+  <h1>Film non trouvé</h1>
+  <button class="btn-back" routerLink="/">Retour à l'accueil</button>
+</div>

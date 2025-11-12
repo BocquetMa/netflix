@@ -1,0 +1,73 @@
+<app-navbar></app-navbar>
+
+<div class="home">
+  <!-- Featured Banner -->
+  <section class="hero" *ngIf="featuredMovie" [style.background-image]="'url(' + featuredMovie.backdropUrl + ')'">
+    <div class="hero__overlay">
+      <div class="hero__content">
+        <h1 class="hero__title">{{ featuredMovie.title }}</h1>
+        <p class="hero__description">{{ featuredMovie.description }}</p>
+        <div class="hero__buttons">
+          <button class="btn btn--primary" [routerLink]="['/watch', featuredMovie.id]">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+            Lecture
+          </button>
+          <button class="btn btn--secondary" [routerLink]="['/movie', featuredMovie.id]">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="16" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            Plus d'infos
+          </button>
+        </div>
+        <div class="hero__metadata">
+          <span class="hero__rating">★ {{ featuredMovie.rating }}</span>
+          <span class="hero__year">{{ featuredMovie.year }}</span>
+          <span class="hero__duration">{{ featuredMovie.duration }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Movie Rows -->
+  <div class="movie-rows">
+    <app-movie-row
+      *ngIf="actionMovies.length"
+      [title]="'Films d\'action'"
+      [movies]="actionMovies">
+    </app-movie-row>
+
+    <app-movie-row
+      *ngIf="sciFiMovies.length"
+      [title]="'Science-Fiction'"
+      [movies]="sciFiMovies">
+    </app-movie-row>
+
+    <app-movie-row
+      *ngIf="series.length"
+      [title]="'Séries populaires'"
+      [movies]="series">
+    </app-movie-row>
+
+    <app-movie-row
+      *ngIf="comedyMovies.length"
+      [title]="'Comédies'"
+      [movies]="comedyMovies">
+    </app-movie-row>
+
+    <app-movie-row
+      *ngIf="dramaMovies.length"
+      [title]="'Drames'"
+      [movies]="dramaMovies">
+    </app-movie-row>
+
+    <app-movie-row
+      *ngIf="allMovies.length"
+      [title]="'Tous les contenus'"
+      [movies]="allMovies">
+    </app-movie-row>
+  </div>
+</div>

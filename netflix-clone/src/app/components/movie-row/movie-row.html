@@ -1,0 +1,8 @@
+<div class="movie-row">
+  <h2 class="movie-row__title">{{ title }}</h2>
+  <div class="movie-row__container">
+    <div class="movie-row__scroll">
+      <app-movie-card *ngFor="let movie of movies" [movie]="movie"></app-movie-card>
+    </div>
+  </div>
+</div>

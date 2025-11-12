@@ -1,0 +1,58 @@
+.movie-row {
+  margin-bottom: 3rem;
+  padding: 0 4%;
+
+  &__title {
+    color: #e5e5e5;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  &__container {
+    position: relative;
+    overflow-x: hidden;
+
+    &:hover .movie-row__scroll {
+      &::-webkit-scrollbar {
+        height: 8px;
+      }
+    }
+  }
+
+  &__scroll {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    padding-bottom: 1rem;
+
+    &::-webkit-scrollbar {
+      height: 0;
+      transition: height 0.3s ease;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.5);
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    margin-bottom: 2rem;
+    padding: 0 2%;
+
+    &__title {
+      font-size: 1.2rem;
+    }
+  }
+}

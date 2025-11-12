@@ -1,0 +1,240 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 20px 4%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+
+  &--scrolled {
+    background-color: #141414;
+  }
+
+  &__container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  &__logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #e50914;
+    text-decoration: none;
+    letter-spacing: 2px;
+  }
+
+  &__menu {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+
+    li a {
+      color: #e5e5e5;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #b3b3b3;
+      }
+    }
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  &__icon {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      color: #b3b3b3;
+    }
+  }
+
+  &__profile {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+
+    img {
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+    }
+
+    .dropdown-icon {
+      transition: transform 0.3s ease;
+    }
+
+    &:hover .dropdown-icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  @media (max-width: 768px) {
+    &__menu {
+      display: none;
+    }
+
+    &__logo {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+.navbar__menu li a.active {
+  color: white;
+  font-weight: 600;
+}
+
+.btn-login-nav {
+  padding: 0.5rem 1.5rem;
+  background: #e50914;
+  color: white;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background: #c40812;
+  }
+}
+
+.profile-menu {
+  position: absolute;
+  top: calc(100% + 1rem);
+  right: 0;
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid #333;
+  border-radius: 4px;
+  min-width: 250px;
+  padding: 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  animation: slideDown 0.2s ease;
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  &__header {
+    padding: 1rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    img {
+      width: 48px;
+      height: 48px;
+      border-radius: 4px;
+    }
+  }
+
+  &__info {
+    flex: 1;
+  }
+
+  &__name {
+    color: white;
+    font-weight: 600;
+    margin: 0 0 0.25rem 0;
+    font-size: 0.95rem;
+  }
+
+  &__email {
+    color: #b3b3b3;
+    margin: 0;
+    font-size: 0.85rem;
+  }
+
+  &__divider {
+    height: 1px;
+    background: #333;
+    margin: 0;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0.5rem 0;
+    margin: 0;
+
+    li {
+      padding: 0;
+      margin: 0;
+
+      a {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        color: #e5e5e5;
+        text-decoration: none;
+        transition: background-color 0.2s;
+
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+      }
+    }
+  }
+
+  &__logout {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: none;
+    border: none;
+    color: #e5e5e5;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 1rem;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      background-color: rgba(229, 9, 20, 0.2);
+      color: #e50914;
+    }
+  }
+}
