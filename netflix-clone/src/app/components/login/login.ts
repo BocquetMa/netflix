@@ -26,7 +26,7 @@ export class Login implements OnInit {
   ngOnInit() {
     // Redirect if already logged in
     if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/']);
+      this.router.navigate(['/select-profile']);
       return;
     }
 
@@ -54,7 +54,9 @@ export class Login implements OnInit {
     this.authService.login(this.f['email'].value, this.f['password'].value)
       .subscribe({
         next: () => {
-          this.router.navigate([this.returnUrl]);
+          this.router.navigate(['/select-profile'], {
+            queryParams: this.returnUrl !== '/' ? { returnUrl: this.returnUrl } : {}
+          });
         },
         error: (error) => {
           this.error = error.message || 'Une erreur est survenue';

@@ -1,21 +1,23 @@
 .content-page {
   min-height: 100vh;
-  background-color: #141414;
+  background-color: var(--bg-base);
   padding-top: 80px;
 }
 
 .page-header {
-  padding: 3rem 4%;
-  
+  padding: 2.5rem 4%;
+
   h1 {
-    font-size: 2.5rem;
-    color: white;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-primary);
     margin: 0 0 0.5rem 0;
+    letter-spacing: -0.03em;
   }
-  
+
   p {
-    color: #b3b3b3;
-    font-size: 1.1rem;
+    color: var(--text-muted);
+    font-size: 1rem;
     margin: 0;
   }
 }

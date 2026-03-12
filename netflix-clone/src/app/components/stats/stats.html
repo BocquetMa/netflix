@@ -1,0 +1,167 @@
+<app-navbar></app-navbar>
+<div class="stats-page">
+  <div class="stats-header">
+    <h1>Mes statistiques</h1>
+    <p *ngIf="profileService.activeProfileValue">Profil : {{ profileService.activeProfileValue.name }}</p>
+  </div>
+
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Analyse en cours...</p>
+  </div>
+
+  <div class="stats-content" *ngIf="!loading">
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon watch">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
+        <div class="kpi-value">~{{ estimatedHours }}h</div>
+        <div class="kpi-label">Temps regardé (estimé)</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon check">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <div class="kpi-value">{{ totalWatched }}</div>
+        <div class="kpi-label">Titres terminés</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon progress">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+        </div>
+        <div class="kpi-value">{{ totalInProgress }}</div>
+        <div class="kpi-label">En cours</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon list">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+          </svg>
+        </div>
+        <div class="kpi-value">{{ myListCount }}</div>
+        <div class="kpi-label">Dans ma liste</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon review">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        </div>
+        <div class="kpi-value">{{ totalReviews }}</div>
+        <div class="kpi-label">Avis publiés</div>
+      </div>
+
+      <div class="kpi-card" *ngIf="totalReviews > 0">
+        <div class="kpi-icon star">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        </div>
+        <div class="kpi-value">{{ avgRatingGiven | number:'1.1-1' }}/5</div>
+        <div class="kpi-label">Note moyenne donnée</div>
+      </div>
+    </div>
+
+    <!-- Favorite genre highlight -->
+    <div class="genre-highlight" *ngIf="favoriteGenre">
+      <div class="genre-highlight__icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19.82 2H4.18A2.18 2.18 0 0 0 2 4.18v15.64A2.18 2.18 0 0 0 4.18 22h15.64A2.18 2.18 0 0 0 22 19.82V4.18A2.18 2.18 0 0 0 19.82 2z"/>
+          <line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+        </svg>
+      </div>
+      <div>
+        <p class="genre-highlight__label">Genre préféré</p>
+        <p class="genre-highlight__name">{{ favoriteGenre }}</p>
+      </div>
+    </div>
+
+    <!-- Two columns: genre chart + type breakdown -->
+    <div class="charts-row" *ngIf="genreStats.length > 0">
+      <div class="chart-card">
+        <h3>Répartition par genre</h3>
+        <div class="genre-bars">
+          <div *ngFor="let g of genreStats" class="genre-bar-item">
+            <div class="genre-bar-label">{{ g.name }}</div>
+            <div class="genre-bar-track">
+              <div class="genre-bar-fill" [style.width.%]="g.percent"></div>
+            </div>
+            <div class="genre-bar-count">{{ g.count }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <h3>Films vs Séries</h3>
+        <div class="type-donut">
+          <div class="donut-ring" [style.background]="'conic-gradient(#7c3aed 0% ' + (totalMovies / (totalMovies + totalSeries) * 100) + '%, #0ea5e9 ' + (totalMovies / (totalMovies + totalSeries) * 100) + '% 100%)'">
+            <div class="donut-hole">
+              <span class="donut-total">{{ totalMovies + totalSeries }}</span>
+              <span class="donut-label">titres</span>
+            </div>
+          </div>
+          <div class="type-legend">
+            <div class="legend-item">
+              <span class="dot movies"></span>
+              <span>Films</span>
+              <strong>{{ totalMovies }}</strong>
+            </div>
+            <div class="legend-item">
+              <span class="dot series"></span>
+              <span>Séries</span>
+              <strong>{{ totalSeries }}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recently watched -->
+    <div class="recent-section" *ngIf="recentlyWatched.length > 0">
+      <h3>Récemment regardés</h3>
+      <div class="recent-grid">
+        <a *ngFor="let entry of recentlyWatched" [routerLink]="['/movie', entry.movie.id]" class="recent-card">
+          <div class="recent-poster">
+            <img [src]="entry.movie.imageUrl" [alt]="entry.movie.title" loading="lazy">
+            <div class="recent-progress-bar">
+              <div class="recent-progress-fill" [style.width.%]="entry.percent"></div>
+            </div>
+          </div>
+          <div class="recent-info">
+            <p class="recent-title">{{ entry.movie.title }}</p>
+            <p class="recent-pct">{{ entry.percent | number:'1.0-0' }}%</p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state" *ngIf="totalWatched === 0 && totalInProgress === 0">
+      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+      <h2>Rien pour l'instant</h2>
+      <p>Lance quelque chose et tes stats apparaîtront ici.</p>
+      <a routerLink="/" class="btn-explore">Parcourir</a>
+    </div>
+
+  </div>
+</div>

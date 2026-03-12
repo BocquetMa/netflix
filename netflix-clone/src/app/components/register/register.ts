@@ -59,7 +59,7 @@ export class Register implements OnInit {
       this.f['name'].value
     ).subscribe({
       next: () => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/select-profile']);
       },
       error: (error) => {
         this.error = error.message || 'Une erreur est survenue';

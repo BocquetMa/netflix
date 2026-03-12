@@ -32,6 +32,46 @@
     </div>
   </section>
 
+  <!-- Soir de film Banner -->
+  <div class="mood-banner">
+    <div class="mood-banner__content">
+      <div class="mood-banner__left">
+        <span class="mood-banner__icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19.82 2H4.18A2.18 2.18 0 0 0 2 4.18v15.64A2.18 2.18 0 0 0 4.18 22h15.64A2.18 2.18 0 0 0 22 19.82V4.18A2.18 2.18 0 0 0 19.82 2z"/>
+            <line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+          </svg>
+        </span>
+        <div>
+          <h2>Soir de film</h2>
+          <p>On trouve, tu regardes.</p>
+        </div>
+      </div>
+      <a routerLink="/mood" class="mood-banner__btn">Choisir mon humeur</a>
+    </div>
+  </div>
+
+  <!-- Continue Watching -->
+  <div class="continue-watching" *ngIf="continueMovies.length">
+    <div class="continue-watching__header">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-light)">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+      <h2>Continuer à regarder</h2>
+    </div>
+    <div class="continue-watching__row">
+      <div class="continue-item" *ngFor="let item of continueMovies">
+        <app-movie-card [movie]="item.movie"></app-movie-card>
+        <button class="continue-item__remove" (click)="removeFromContinue(item.movie.id)" title="Retirer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Movie Rows -->
   <div class="movie-rows">
     <app-movie-row

@@ -1,0 +1,87 @@
+<app-navbar></app-navbar>
+<div class="calendar-page">
+  <div class="calendar-header">
+    <h1>Calendrier des sorties</h1>
+    <p>Films et séries à venir sur les plateformes</p>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button [class.active]="activeTab === 'week'" (click)="setTab('week')">
+      Cette semaine
+      <span class="tab-count" *ngIf="!loading">{{ countForTab('week') }}</span>
+    </button>
+    <button [class.active]="activeTab === 'month'" (click)="setTab('month')">
+      Ce mois
+      <span class="tab-count" *ngIf="!loading">{{ countForTab('month') }}</span>
+    </button>
+    <button [class.active]="activeTab === 'all'" (click)="setTab('all')">
+      Prochainement
+      <span class="tab-count" *ngIf="!loading">{{ countForTab('all') }}</span>
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Chargement du calendrier...</p>
+  </div>
+
+  <!-- Content -->
+  <div class="calendar-content" *ngIf="!loading">
+    <div *ngIf="groups.length === 0" class="empty-state">
+      <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+      <p>Aucune sortie prévue pour cette période.</p>
+    </div>
+
+    <div *ngFor="let group of groups" class="release-group">
+      <div class="group-header">
+        <div class="group-line"></div>
+        <span class="group-label">{{ group.label }}</span>
+        <div class="group-line"></div>
+      </div>
+
+      <div class="release-cards">
+        <a
+          *ngFor="let movie of group.movies"
+          [routerLink]="['/movie', movie.id]"
+          class="release-card"
+        >
+          <div class="release-poster">
+            <img [src]="movie.imageUrl" [alt]="movie.title" loading="lazy">
+            <div class="release-type" [class.series]="movie.type === 'series'">
+              {{ movie.type === 'series' ? 'Série' : 'Film' }}
+            </div>
+          </div>
+          <div class="release-info">
+            <h3>{{ movie.title }}</h3>
+            <div class="release-date-line">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <span>{{ formatDate(movie.releaseDate!) }}</span>
+            </div>
+            <div class="release-meta">
+              <span class="rating">★ {{ movie.rating }}</span>
+              <span *ngIf="movie.genre[0]">{{ movie.genre[0] }}</span>
+            </div>
+            <div class="countdown" *ngIf="daysUntil(movie.releaseDate!) > 0">
+              Dans {{ daysUntil(movie.releaseDate!) }} jour{{ daysUntil(movie.releaseDate!) > 1 ? 's' : '' }}
+            </div>
+            <div class="countdown today" *ngIf="daysUntil(movie.releaseDate!) === 0">
+              Disponible aujourd'hui !
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

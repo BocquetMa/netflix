@@ -8,6 +8,11 @@
       <path d="M20 6L9 17l-5-5"/>
     </svg>
   </button>
+  <!-- Progress bar -->
+  <div class="movie-card__progress" *ngIf="progress > 0 && progress < 98">
+    <div class="movie-card__progress-fill" [style.width.%]="progress"></div>
+  </div>
+
   <div class="movie-card__overlay">
     <div class="movie-card__info">
       <h3 class="movie-card__title">{{ movie.title }}</h3>
