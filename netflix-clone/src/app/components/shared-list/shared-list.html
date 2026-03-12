@@ -1,0 +1,64 @@
+<div class="shared-list-page">
+  <div class="shared-header">
+    <div class="logo">NETSTREAM</div>
+  </div>
+
+  <div class="shared-content">
+    <div *ngIf="loading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Chargement de la liste...</p>
+    </div>
+
+    <div *ngIf="error && !loading" class="error-state">
+      <h2>Lien invalide</h2>
+      <p>Ce lien de partage est incorrect ou expiré.</p>
+      <a routerLink="/login" class="btn-home">Accueil</a>
+    </div>
+
+    <ng-container *ngIf="!loading && !error">
+      <div class="shared-title">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="18" cy="5" r="3"></circle>
+          <circle cx="6" cy="12" r="3"></circle>
+          <circle cx="18" cy="19" r="3"></circle>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+        </svg>
+        <div>
+          <h1>Liste de {{ profileName }}</h1>
+          <p>{{ movies.length }} titre{{ movies.length > 1 ? 's' : '' }}</p>
+        </div>
+      </div>
+
+      <div *ngIf="movies.length === 0" class="empty-state">
+        <p>Cette liste est vide.</p>
+      </div>
+
+      <div class="movies-grid" *ngIf="movies.length > 0">
+        <a
+          *ngFor="let movie of movies"
+          [routerLink]="['/movie', movie.id]"
+          class="movie-card"
+        >
+          <div class="movie-poster">
+            <img [src]="movie.imageUrl" [alt]="movie.title" loading="lazy">
+            <div class="movie-type-badge">{{ movie.type === 'series' ? 'Série' : 'Film' }}</div>
+          </div>
+          <div class="movie-info">
+            <h3>{{ movie.title }}</h3>
+            <div class="movie-meta">
+              <span class="rating">★ {{ movie.rating }}</span>
+              <span>{{ movie.year }}</span>
+              <span *ngIf="movie.genre[0]">{{ movie.genre[0] }}</span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="shared-footer">
+        <p>Découvrez Netstream — votre plateforme de streaming</p>
+        <a routerLink="/login" class="btn-join">Rejoindre Netstream</a>
+      </div>
+    </ng-container>
+  </div>
+</div>
