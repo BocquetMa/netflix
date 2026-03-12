@@ -1,22 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { forkJoin, of, Subscription } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 import { Movies } from '../../services/movies';
-import { Progress } from '../../services/progress';
 import { Movie } from '../../models/movie';
 import { MovieRow } from '../movie-row/movie-row';
-import { MovieCard } from '../movie-card/movie-card';
 import { Navbar } from '../navbar/navbar';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, RouterLink, MovieRow, MovieCard, Navbar],
+  imports: [CommonModule, RouterLink, MovieRow, Navbar],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
-export class Home implements OnInit, OnDestroy {
+export class Home implements OnInit {
   featuredMovie?: Movie;
   allMovies: Movie[] = [];
   actionMovies: Movie[] = [];
@@ -24,34 +20,10 @@ export class Home implements OnInit, OnDestroy {
   dramaMovies: Movie[] = [];
   sciFiMovies: Movie[] = [];
   series: Movie[] = [];
-  continueMovies: { movie: Movie; percent: number }[] = [];
 
-  private progressSub!: Subscription;
-
-  constructor(
-    private moviesService: Movies,
-    private progressService: Progress
-  ) {}
+  constructor(private moviesService: Movies) {}
 
   ngOnInit() {
-    // Continue watching — réactif aux changements de progression
-    this.progressSub = this.progressService.changes$.pipe(
-      switchMap(() => {
-        const entries = this.progressService.getInProgress();
-        if (!entries.length) return of([]);
-        return forkJoin(
-          entries.map(e => this.moviesService.getMovieById(e.movieId))
-        ).pipe(
-          switchMap(movies => of(
-            movies
-              .map((movie, i) => ({ movie, percent: entries[i].percent }))
-              .filter(item => !!item.movie) as { movie: Movie; percent: number }[]
-          ))
-        );
-      })
-    ).subscribe(items => {
-      this.continueMovies = items;
-    });
     this.moviesService.getFeaturedMovie().subscribe(movie => {
       this.featuredMovie = movie;
     });
@@ -79,13 +51,5 @@ export class Home implements OnInit, OnDestroy {
     this.moviesService.getMoviesByType('series').subscribe(movies => {
       this.series = movies;
     });
-  }
-
-  removeFromContinue(movieId: number) {
-    this.progressService.remove(movieId);
-  }
-
-  ngOnDestroy() {
-    this.progressSub?.unsubscribe();
   }
 }

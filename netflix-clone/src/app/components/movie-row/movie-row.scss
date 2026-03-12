@@ -1,47 +1,49 @@
 .movie-row {
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem;
   padding: 0 4%;
 
   &__title {
-    color: var(--text-primary);
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 0.875rem;
-    letter-spacing: -0.01em;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-
-    &::before {
-      content: '';
-      display: inline-block;
-      width: 3px;
-      height: 1em;
-      background: linear-gradient(180deg, var(--accent), var(--accent-light));
-      border-radius: 2px;
-      flex-shrink: 0;
-    }
+    color: #e5e5e5;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
   }
 
   &__container {
     position: relative;
     overflow-x: hidden;
+
+    &:hover .movie-row__scroll {
+      &::-webkit-scrollbar {
+        height: 8px;
+      }
+    }
   }
 
   &__scroll {
     display: flex;
-    gap: 0.625rem;
+    gap: 0.5rem;
     overflow-x: auto;
     overflow-y: hidden;
     scroll-behavior: smooth;
-    padding-bottom: 0.75rem;
+    padding-bottom: 1rem;
 
-    &::-webkit-scrollbar { height: 0; }
-    &::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); }
+    &::-webkit-scrollbar {
+      height: 0;
+      transition: height 0.3s ease;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
     &::-webkit-scrollbar-thumb {
-      background: var(--border-light);
+      background: rgba(255, 255, 255, 0.3);
       border-radius: 4px;
-      &:hover { background: rgba(255,255,255,0.25); }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.5);
+      }
     }
   }
 
@@ -49,6 +51,8 @@
     margin-bottom: 2rem;
     padding: 0 2%;
 
-    &__title { font-size: 1.05rem; }
+    &__title {
+      font-size: 1.2rem;
+    }
   }
 }

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { User } from '../models/user';
-import { UserProfile } from '../models/user-profile';
 
 @Injectable({
   providedIn: 'root',
@@ -11,28 +10,14 @@ export class Auth {
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser$: Observable<User | null>;
 
+  // Mock users database
   private mockUsers: User[] = [
     {
       id: 1,
       email: 'demo@netstream.com',
-      name: 'Demo Account',
+      name: 'Demo User',
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
-      profiles: [
-        {
-          id: 1,
-          name: 'Demo',
-          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
-          myList: [1, 3, 5],
-          isKids: false
-        },
-        {
-          id: 2,
-          name: 'Enfants',
-          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Luna',
-          myList: [],
-          isKids: true
-        }
-      ]
+      myList: [1, 3, 5]
     }
   ];
 
@@ -49,13 +34,17 @@ export class Auth {
   }
 
   login(email: string, password: string): Observable<User> {
+    // Simulate API call
     return of(null).pipe(
       delay(1000),
       map(() => {
+        // Mock authentication - accept any password for demo@netstream.com
         const user = this.mockUsers.find(u => u.email === email);
+
         if (!user || password.length < 4) {
           throw new Error('Email ou mot de passe incorrect');
         }
+
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
         return user;
@@ -67,27 +56,22 @@ export class Auth {
     return of(null).pipe(
       delay(1000),
       map(() => {
+        // Check if user already exists
         if (this.mockUsers.find(u => u.email === email)) {
           throw new Error('Cet email est déjà utilisé');
         }
+
         if (password.length < 6) {
           throw new Error('Le mot de passe doit contenir au moins 6 caractères');
         }
 
-        const defaultProfile: UserProfile = {
-          id: 1,
-          name,
-          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`,
-          myList: [],
-          isKids: false
-        };
-
+        // Create new user
         const newUser: User = {
           id: this.mockUsers.length + 1,
           email,
           name,
-          avatar: defaultProfile.avatar,
-          profiles: [defaultProfile]
+          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`,
+          myList: []
         };
 
         this.mockUsers.push(newUser);
@@ -98,13 +82,6 @@ export class Auth {
     );
   }
 
-  updateUser(user: User): void {
-    const idx = this.mockUsers.findIndex(u => u.id === user.id);
-    if (idx !== -1) this.mockUsers[idx] = user;
-    localStorage.setItem('currentUser', JSON.stringify(user));
-    this.currentUserSubject.next(user);
-  }
-
   logout(): void {
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
@@ -112,5 +89,28 @@ export class Auth {
 
   isAuthenticated(): boolean {
     return this.currentUserValue !== null;
+  }
+
+  addToMyList(movieId: number): void {
+    const user = this.currentUserValue;
+    if (user && !user.myList.includes(movieId)) {
+      user.myList.push(movieId);
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      this.currentUserSubject.next(user);
+    }
+  }
+
+  removeFromMyList(movieId: number): void {
+    const user = this.currentUserValue;
+    if (user) {
+      user.myList = user.myList.filter(id => id !== movieId);
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      this.currentUserSubject.next(user);
+    }
+  }
+
+  isInMyList(movieId: number): boolean {
+    const user = this.currentUserValue;
+    return user ? user.myList.includes(movieId) : false;
   }
 }

@@ -1,10 +1,8 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { Movie } from '../../models/movie';
-import { ProfileService } from '../../services/profile';
-import { Progress } from '../../services/progress';
+import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-movie-card',
@@ -12,38 +10,23 @@ import { Progress } from '../../services/progress';
   templateUrl: './movie-card.html',
   styleUrl: './movie-card.scss',
 })
-export class MovieCard implements OnInit, OnDestroy {
+export class MovieCard {
   @Input() movie!: Movie;
 
-  progress = 0;
-  private sub!: Subscription;
-
-  constructor(
-    private profileService: ProfileService,
-    private progressService: Progress
-  ) {}
-
-  ngOnInit() {
-    this.sub = this.progressService.changes$.subscribe(() => {
-      this.progress = this.progressService.get(this.movie.id);
-    });
-  }
+  constructor(private authService: Auth) {}
 
   isInMyList(): boolean {
-    return this.profileService.isInMyList(this.movie.id);
+    return this.authService.isInMyList(this.movie.id);
   }
 
   toggleMyList(event: Event): void {
     event.preventDefault();
     event.stopPropagation();
-    if (this.isInMyList()) {
-      this.profileService.removeFromMyList(this.movie.id);
-    } else {
-      this.profileService.addToMyList(this.movie.id);
-    }
-  }
 
-  ngOnDestroy() {
-    this.sub?.unsubscribe();
+    if (this.isInMyList()) {
+      this.authService.removeFromMyList(this.movie.id);
+    } else {
+      this.authService.addToMyList(this.movie.id);
+    }
   }
 }

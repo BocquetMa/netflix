@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { forkJoin } from 'rxjs';
 import { Movies } from '../../services/movies';
-import { ProfileService } from '../../services/profile';
+import { Auth } from '../../services/auth';
 import { Movie } from '../../models/movie';
 import { Navbar } from '../navbar/navbar';
 import { MovieRow } from '../movie-row/movie-row';
@@ -15,50 +14,32 @@ import { MovieRow } from '../movie-row/movie-row';
 })
 export class MyList implements OnInit {
   myListMovies: Movie[] = [];
-  loading = false;
-  shareLink: string | null = null;
-  copied = false;
+  allMovies: Movie[] = [];
 
   constructor(
     private moviesService: Movies,
-    private profileService: ProfileService
+    private authService: Auth
   ) {}
 
   ngOnInit() {
-    this.profileService.activeProfile$.subscribe(() => {
-      this.loadMyList();
+    // Load all movies first
+    this.moviesService.getAllMovies().subscribe(movies => {
+      this.allMovies = movies;
+      this.updateMyList();
+    });
+
+    // Subscribe to user changes to update the list in real-time
+    this.authService.currentUser$.subscribe(() => {
+      this.updateMyList();
     });
   }
 
-  loadMyList() {
-    const profile = this.profileService.activeProfileValue;
-    if (!profile || profile.myList.length === 0) {
+  updateMyList() {
+    const user = this.authService.currentUserValue;
+    if (user && user.myList.length > 0) {
+      this.myListMovies = this.allMovies.filter(movie => user.myList.includes(movie.id));
+    } else {
       this.myListMovies = [];
-      return;
     }
-    this.loading = true;
-    forkJoin(profile.myList.map(id => this.moviesService.getMovieById(id))).subscribe({
-      next: (movies) => {
-        this.myListMovies = movies.filter(Boolean) as Movie[];
-        this.loading = false;
-      },
-      error: () => { this.loading = false; }
-    });
-  }
-
-  shareList() {
-    const profile = this.profileService.activeProfileValue;
-    if (!profile || profile.myList.length === 0) return;
-    const data = { n: profile.name, ids: profile.myList };
-    const token = btoa(encodeURIComponent(JSON.stringify(data)));
-    this.shareLink = `${window.location.origin}/shared-list/${token}`;
-    navigator.clipboard.writeText(this.shareLink).then(() => {
-      this.copied = true;
-      setTimeout(() => this.copied = false, 3000);
-    }).catch(() => {});
-  }
-
-  closeShare() {
-    this.shareLink = null;
   }
 }
